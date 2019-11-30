@@ -11,7 +11,7 @@ def task_one():
 
     if request.method == 'POST':
         result = task_one(request.form['email'], request.form['email-body'])
-        return render_template('task1.html', prob=result[0], explaination=result[1])  # returns a tuple containing the prob of the email being a malicious email and the explaination why
+        return render_template('task1.html', prob=result[0], explanation=result[1])  # returns a tuple containing the prob of the email being a malicious email and the explanation why
 
     else:
         return render_template('task1.html')
@@ -26,8 +26,8 @@ def task_two():
 def query_one_input():
 
     if request.method == 'POST':
-        query_one_result = query_one(request.form['search'])  # returns a tuple containing the prob of the query being a malicious query and the explaination why
-        return render_template('task2.html', query_one_prob=query_one_result[0], query_one_explaination=query_one_result[1])
+        query_one_result = query_one(request.form['search'])  # returns a tuple containing the prob of the query being a malicious query and the explanation why
+        return render_template('task2.html', query_one_prob=query_one_result[0], query_one_explanation=query_one_result[1])
 
     else:
         return render_template('task2.html')
@@ -37,8 +37,8 @@ def query_one_input():
 def query_two_input():
 
     if request.method == 'POST':
-        query_two_result = query_two(request.form['username'], request.form['password'])  # returns a tuple containing the prob of the query being a malicious query and the explaination why
-        return render_template('task2.html', query_two_prob=query_two_result[0], query_two_explaination=query_two_result[1])
+        query_two_result = query_two(request.form['username'], request.form['password'])  # returns a tuple containing the prob of the query being a malicious query and the explanation why
+        return render_template('task2.html', query_two_prob=query_two_result[0], query_two_explanation=query_two_result[1])
 
     else:
         return render_template('task2.html')
@@ -87,23 +87,23 @@ def task_one(senders_email, email_text):
             contains_spammy_words = True
             sus_o_meter += 1
 
-    if not senders_email.isalpha():  # add  3 to the sus meter if the email name contains a number
+    if contains_number(senders_email):  # add  3 to the sus meter if the email name contains a number
         contains_num = True
         sus_o_meter += 3
 
-# -------
+# ----- Range check and explanations -----
 
     if sus_o_meter <= 3:
         prob = sus_o_meter
-        explaination = 'Most likely a safe sender.'
+        explanation = 'Most likely a safe sender.'
 
-        return prob, explaination
+        return prob, explanation
 
     if sus_o_meter > 3 and sus_o_meter <= 5:
         if contains_spammy_words == True:
             prob = sus_o_meter
-            explaination = 'This may be a suspicious sender as it contains spammy words'
-            return prob, explaination
+            explanation = 'This may be a suspicious sender as it contains spammy words'
+            return prob, explanation
 
     if sus_o_meter > 5:
         if contains_spammy_words is True and spammy_domain is True:
@@ -111,32 +111,38 @@ def task_one(senders_email, email_text):
                 prob = 10
             else:
                 prob = sus_o_meter
-            explaination = 'This is most likely a phishing attack as it contains a spammy email and spammy words'
-            return prob, explaination
+            explanation = 'This is most likely a phishing attack as it contains a spammy email and spammy words'
+            return prob, explanation
         elif contains_spammy_words is True and spammy_domain is False:
             prob = sus_o_meter
-            explaination = 'This is most likely a phishing attack as it contains lots of spammy words'
-            return prob, explaination
+            explanation = 'This is most likely a phishing attack as it contains lots of spammy words'
+            return prob, explanation
         else:
             prob = sus_o_meter
-            explaination = 'This is most likely a phishing attack as it contains a spammy email domain'
-            return prob, explaination
+            explanation = 'This is most likely a phishing attack as it contains a spammy email domain'
+            return prob, explanation
+
+    return 'error', 'error'
 
 
 def query_one(search):
 
     prob = 'INSERT PROB HERE'
-    explaination = 'INSERT EXPLAINATION HERE'
+    explanation = 'INSERT EXPLANATION HERE'
 
-    return prob, explaination
+    return prob, explanation
 
 
 def query_two(username, password):
 
     prob = 'INSERT PROB HERE'
-    explaination = 'INSERT EXPLAINATION HERE'
+    explanation = 'INSERT EXPLANATION HERE'
 
-    return prob, explaination
+    return prob, explanation
+
+# -------- Helpers ---------
+def contains_number(s):
+    return any(i.isdigit() for i in s)
 
 
 if __name__ == '__main__':
