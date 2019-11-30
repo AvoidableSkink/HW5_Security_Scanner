@@ -7,40 +7,41 @@ app = Flask(__name__)
 def task_one():
 
     if request.method == 'POST':
-
-        return render_template('task1.html', prob='prob', explaination='explain')
+        result = task_one(request.form['email'], request.form['email-body'])
+        return render_template('task1.html', prob=result[0], explaination=result[1])  # returns a tuple containing the prob of the email being a malicious email and the explaination why
 
     else:
         return render_template('task1.html')
+
 
 @app.route('/task2', methods=['GET'])
 def task_two():
     return render_template('task2.html')
 
+
 @app.route('/query_one', methods=['GET', 'POST'])
 def query_one_input():
 
     if request.method == 'POST':
-
         query_one_result = query_one(request.form['search'])  # returns a tuple containing the prob of the query being a malicious query and the explaination why
-
         return render_template('task2.html', query_one_prob=query_one_result[0], query_one_explaination=query_one_result[1])
+
     else:
         return render_template('task2.html')
+
 
 @app.route('/query_two', methods=['GET', 'POST'])
 def query_two_input():
 
     if request.method == 'POST':
-
         query_two_result = query_two(request.form['username'], request.form['password'])  # returns a tuple containing the prob of the query being a malicious query and the explaination why
-
         return render_template('task2.html', query_two_prob=query_two_result[0], query_two_explaination=query_two_result[1])
+
+    else:
+        return render_template('task2.html')
 
 
 def task_one(senders_email, email_text):
-    senders_email = input("Enter in your email address: ")
-    email_text = input("Enter in the message you would like to send: ")
 
     spammy_email_domains = ["apple-com", "applecom", "apple.con", "appie.com", "app-le.com", "pavpal.com",
                             "puaypal.com", "pauypal.com",
@@ -81,24 +82,26 @@ def task_one(senders_email, email_text):
         contains_num = True
         sus_o_meter += 3
 
+    prob = 'INSERT PROB HERE'
+    explaination = 'INSERT EXPLAINATION HERE'
+
+    return prob, explaination
+
 
 def query_one(search):
-    prob = ''
-    explaination = ''
+
+    prob = 'INSERT PROB HERE'
+    explaination = 'INSERT EXPLAINATION HERE'
 
     return prob, explaination
 
 
 def query_two(username, password):
-    prob = ''
-    explaination = ''
+
+    prob = 'INSERT PROB HERE'
+    explaination = 'INSERT EXPLAINATION HERE'
 
     return prob, explaination
-
-
-
-
-
 
 
 if __name__ == '__main__':
