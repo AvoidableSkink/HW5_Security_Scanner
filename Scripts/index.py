@@ -2,6 +2,9 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
+# ----------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------     ROUTES     ----------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
 
 @app.route('/task1', methods=['GET', 'POST'])
 def task_one():
@@ -40,6 +43,9 @@ def query_two_input():
     else:
         return render_template('task2.html')
 
+# ----------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------     END ROUTES    ---------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
 
 def task_one(senders_email, email_text):
 
@@ -68,24 +74,53 @@ def task_one(senders_email, email_text):
     email_domain = email_domain.replace('.org', '.com')
 
     sus_o_meter = 0
-    spammy_word_count = 0
     contains_num = False
+    contains_spammy_words = False
+    spammy_domain = False
 
-    if email_domain in spammy_email_domains:
-        print("you finna be hacked")
+    if email_domain in spammy_email_domains: # add 10 to the sus meter if the domain is in our spammy domain list
+        spammy_domain = True
+        sus_o_meter += 10
 
     for word in spammy_word_list:  # add 1 to the sus meter if it contains a spammy word
         if word in email_text:
+            contains_spammy_words = True
             sus_o_meter += 1
 
     if not senders_email.isalpha():  # add  3 to the sus meter if the email name contains a number
         contains_num = True
         sus_o_meter += 3
 
-    prob = 'INSERT PROB HERE'
-    explaination = 'INSERT EXPLAINATION HERE'
+# -------
 
-    return prob, explaination
+    if sus_o_meter <= 3:
+        prob = sus_o_meter
+        explaination = 'Most likely a safe sender.'
+
+        return prob, explaination
+
+    if sus_o_meter > 3 and sus_o_meter <= 5:
+        if contains_spammy_words == True:
+            prob = sus_o_meter
+            explaination = 'This may be a suspicious sender as it contains spammy words'
+            return prob, explaination
+
+    if sus_o_meter > 5:
+        if contains_spammy_words is True and spammy_domain is True:
+            if sus_o_meter > 10:
+                prob = 10
+            else:
+                prob = sus_o_meter
+            explaination = 'This is most likely a phishing attack as it contains a spammy email and spammy words'
+            return prob, explaination
+        elif contains_spammy_words is True and spammy_domain is False:
+            prob = sus_o_meter
+            explaination = 'This is most likely a phishing attack as it contains lots of spammy words'
+            return prob, explaination
+        else:
+            prob = sus_o_meter
+            explaination = 'This is most likely a phishing attack as it contains a spammy email domain'
+            return prob, explaination
 
 
 def query_one(search):
