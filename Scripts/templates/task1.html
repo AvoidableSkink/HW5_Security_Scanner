@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <meta charset="utf-8">
+  <title>Security Scanner</title>
+
+  <style>
+    .row {
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 25px;
+    }
+  </style>
+
+</head>
+
+<body>
+  <form action="/task1" method="POST">
+    <div class="jumbotron text-center">
+      <h1>Security Scanner</h1>
+      <p>Please enter your information below</p>
+    </div>
+
+    <div class="row">
+      <div class="col form-group text-center">
+        <label for="email">Senders Email Address:</label>
+        <input name="email" class="form-control" id="email" placeholder="example@example.com" type="text">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col form-group text-center">
+        <label for="email-body">Email Body</label>
+        <textarea name="email-body" class="form-control" id="email-body" rows="6" placeholder="Hello, please dont forget that we have lunch scheduled for 2 today. 
+          -Sam" type="email"></textarea>
+      </div>
+    </div>
+
+    <div style="text-align: center">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+
+    <div class="row">
+      <div class="col form-group">
+        <label for="probability">Probability of Phishing Email:</label>
+        <textarea readonly class="form-control" rows="5" id="probability-output"
+          placeholder="There is a 95% probability that this is a phishing email.">{{ prob }}</textarea>
+      </div>
+      <div class="col form-group">
+        <label for="explaination">Explaination:</label>
+        <textarea readonly class="form-control" rows="5" id="explaination-output"
+          placeholder="The email address is 123attacker@33_attacker.com and they asked for your SSN">{{ explaination }}</textarea>
+      </div>
+    </div>
+
+</form>
+  <!--Bootstrap scripts must be loaded at the end of the body-->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+  </script>
+</body>
+
+</html>
