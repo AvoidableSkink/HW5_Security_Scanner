@@ -61,7 +61,9 @@ def task_one(senders_email, email_text):
     spammy_word_list = ["label", "invoice", "post", "document", "postal", "calculations", "copy", "fedex", "statement",
                         "financial", "dhl", "usps", "8", "notification", "irs", "ups", "no", "delivery", "ticket",
                         "account", "secur", "verif", "com-", "update", "support", "service", "login", "Auth",
-                        "confirm", ]
+                        "confirm", 'urgent', 'login', 'need', 'immediately', 'immediacy', 'right now', 'soon', 'expire', 'expiring',
+                        'as soon as possible', 'minutes', 'hours', 'seconds', 'days', 'months', 'urgency', 'account', 'bank', 'offer',
+                        'redeem', 'unusual', 'activity']
 
     email_text_list = email_text.split()  # split the email text into an array of strings
     split_email = senders_email.split('@')  # split the email name from the domain name
