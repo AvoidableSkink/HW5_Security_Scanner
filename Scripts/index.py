@@ -125,12 +125,27 @@ def task_one(senders_email, email_text):
     return 'error', 'error'
 
 
+# Tautologies,
+# Illegal/Logically Incorrect Queries,
+# Union Queries,
+# Piggy-backed Queries,
+# Inference,
+# Alternate Encodings
+
+
 def query_one(search):
 
-    prob = 'INSERT PROB HERE'
-    explanation = 'INSERT EXPLANATION HERE'
+    possible_sql_attacks = ['1=1', 'union', 'login', 'password', 'pass', 'pin', 'drop', 'table', 'username', 'admin', 'shutdown', '1=0', 'waitfor', '--', 'exec']
 
-    return prob, explanation
+    if search in possible_sql_attacks:
+        prob = 'high'
+        explanation = 'the query contained spammy things'
+        return prob, explanation
+    else:
+        prob = 'low'
+        explanation = 'did not contain anything fishy'
+
+        return prob, explanation
 
 
 def query_two(username, password):
