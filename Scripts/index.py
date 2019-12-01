@@ -151,7 +151,7 @@ def query_one(search):
 
 
 def query_two(username, password):
-    possible_sql_attacks = ["1=1", "--", "\"", "convert", "int", "sysobjects", "xtype", "union", ";", "shutdown", "@", "1=0", "ascii", "substring", "waitfor", "exec", "char", "0x"]
+    possible_sql_attacks = ["1=1", "--", "''", "convert", "int", "sysobjects", "xtype", "union", ";", "shutdown", "@", "1=0", "ascii", "substring", "waitfor", "exec", "char", "0x"]
 
     if username or password in possible_sql_attacks:
         prob = 'high'
