@@ -87,7 +87,7 @@ def task_one(senders_email, email_text):
     for word in spammy_word_list:  # add 1 to the sus meter if it contains a spammy word
         if word in email_text:
             contains_spammy_words = True
-            sus_o_meter += 1
+            sus_o_meter += 5
 
     if contains_number(senders_email):  # add  3 to the sus meter if the email name contains a number
         contains_num = True
