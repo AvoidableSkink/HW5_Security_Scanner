@@ -1,3 +1,4 @@
+import re
 from itertools import product
 from collections import Counter
 
@@ -25,29 +26,30 @@ def task_one():
 
 @app.route('/task2', methods=['GET'])
 def task_two():
-    return render_template('task2.html')
+    return render_template('task2.html.j2')
 
 
 @app.route('/query_one', methods=['GET', 'POST'])
 def query_one_input():
 
     if request.method == 'POST':
-        query_one_result = query_one(request.form['search'])  # returns a tuple containing the prob of the query being a malicious query and the explanation why
-        return render_template('task2.html', query_one_prob=query_one_result[0], query_one_explanation=query_one_result[1])
+        prob, explanations = query_one(request.form['search'])  # returns a tuple containing the prob of the query being a malicious query and the explanation why
+        return render_template('task2.html.j2', query_one_prob=prob, query_one_explanation=explanations, query_one=request.form['search'])
 
     else:
-        return render_template('task2.html')
+        return render_template('task2.html.j2')
 
 
 @app.route('/query_two', methods=['GET', 'POST'])
 def query_two_input():
 
+
     if request.method == 'POST':
-        query_two_result = query_two(request.form['username'], request.form['password'])  # returns a tuple containing the prob of the query being a malicious query and the explanation why
-        return render_template('task2.html', query_two_prob=query_two_result[0], query_two_explanation=query_two_result[1])
+        prob, explanations = query_two(request.form['username'], request.form['password'])   # returns a tuple containing the prob of the query being a malicious query and the explanation why
+        return render_template('task2.html.j2', query_two_prob=prob, query_two_explanation=explanations, query_two_username=request.form['username'], query_two_password=request.form['password'])
 
     else:
-        return render_template('task2.html')
+        return render_template('task2.html.j2')
 
 # ----------------------------------------------------------------------------------------------------------------------
 # ------------------------------------------------     END ROUTES    ---------------------------------------------------
@@ -125,35 +127,67 @@ def task_one(senders_email, email_text):
 
 
 def query_one(search):
+    explanations = []
+    badness_score = 0
+    has_possible_bad_quotes = False
+    has_possible_tautology = False
+
+    has_possible_bad_quotes, score = possible_bad_quotes(search)
+    if has_possible_bad_quotes:
+        explanations.append('The query contains a possible incorrect number of quotes')
+    badness_score += score
+    has_possible_tautology, score = possible_tautology(search)
+    if has_possible_tautology:
+        explanations.append('The query contains a possible tautology attack')
+    badness_score += score
 
     possible_sql_attacks = ['1=1', 'union', 'login', 'password', 'pass', 'pin', 'drop', 'table', 'username', 'admin', 'shutdown', '1=0', 'waitfor', '--', 'exec']
 
     if search in possible_sql_attacks:
-        prob = 'high'
-        explanation = 'The query was not searching for an item, thus it would be blocked.'
-        return prob, explanation
-    else:
-        prob = 'low'
-        explanation = 'The query appeared to be searching for an item, thus it would be executed'
-
-        return prob, explanation
+        badness_score += 80
+        explanations.append('The query was not searching for an item, thus it would be blocked.')
+    return badness_score, explanations
 
 
 def query_two(username, password):
+    explanations = []
+    badness_score = 0
+    has_possible_bad_quotes = False
+    has_possible_tautology = False
+
+    has_possible_bad_quotes, score = possible_bad_quotes(search)
+    if has_possible_bad_quotes:
+        explanations.append('The query contains a possible incorrect number of quotes')
+    badness_score += score
+    has_possible_tautology, score = possible_tautology(search)
+    if has_possible_tautology:
+        explanations.append('The query contains a possible tautology attack')
+    badness_score += score
+
     possible_sql_attacks = ["1=1", "--", "''", "convert", "int", "sysobjects", "xtype", "union", ";", "shutdown", "@", "1=0", "ascii", "substring", "waitfor", "exec", "char", "0x"]
 
-    if username or password in possible_sql_attacks:
-        prob = 'high'
-        explanation = 'The username and password provided looks like a possible SQL attack'
-        return prob, explanation
-    else:
-        prob = 'low'
-        explanation = 'The username and password appear legitimate, thus it would be executed.'
-        return prob, explanation
+    if search in possible_sql_attacks:
+        badness_score += 80
+        explanations.append('The username and password provided looks like a possible SQL attack')
+    return badness_score, explanations
 
 # -------- Helpers ---------
 def contains_number(s):
     return any(i.isdigit() for i in s)
+
+def possible_bad_quotes(test_string):
+    if test_string.count("'") % 2 != 0:
+        return True, 10 #  Could be an attack
+    return False, 0
+
+def possible_tautology(test_string):
+    regex = r'[\w\']+=[\w\']+'
+    matches = re.findall(regex, 'WHERE \'hello\'=\'hello\' and lol=lol', re.MULTILINE)
+    for match in matches:
+        sides = match.split('=')
+        if len(sides) > 1 and sides[0] == sides[1]:
+            return True, 10
+    return False, 0
 
 def domain_spam_score(test_domain=None):
     if test_domain is None:
