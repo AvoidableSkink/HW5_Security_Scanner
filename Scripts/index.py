@@ -182,7 +182,7 @@ def possible_bad_quotes(test_string):
 
 def possible_tautology(test_string):
     regex = r'[\w\']+=[\w\']+'
-    matches = re.findall(regex, 'WHERE \'hello\'=\'hello\' and lol=lol', re.MULTILINE)
+    matches = re.findall(regex, test_string, re.MULTILINE)
     for match in matches:
         sides = match.split('=')
         if len(sides) > 1 and sides[0] == sides[1]:
