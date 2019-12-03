@@ -155,18 +155,18 @@ def query_two(username, password):
     has_possible_bad_quotes = False
     has_possible_tautology = False
 
-    has_possible_bad_quotes, score = possible_bad_quotes(search)
+    has_possible_bad_quotes, score = possible_bad_quotes(username)
     if has_possible_bad_quotes:
         explanations.append('The query contains a possible incorrect number of quotes')
     badness_score += score
-    has_possible_tautology, score = possible_tautology(search)
+    has_possible_tautology, score = possible_tautology(username)
     if has_possible_tautology:
         explanations.append('The query contains a possible tautology attack')
     badness_score += score
 
     possible_sql_attacks = ["1=1", "--", "''", "convert", "int", "sysobjects", "xtype", "union", ";", "shutdown", "@", "1=0", "ascii", "substring", "waitfor", "exec", "char", "0x"]
 
-    if search in possible_sql_attacks:
+    if username in possible_sql_attacks:
         badness_score += 80
         explanations.append('The username and password provided looks like a possible SQL attack')
     return badness_score, explanations
